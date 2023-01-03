@@ -7,6 +7,7 @@ template<class T>
 mds::MyVector<T>::MyVector() {
 
     size = 0;
+    capacity = 0;
 
     arr = nullptr;
 
@@ -22,9 +23,9 @@ template<class T>
 mds::MyVector<T>::MyVector(int size) {
 
     this->size = size;
+    capacity = size;
 
-    this->arr = new T[size]{};
-
+    arr = new T[capacity]{};
 
 #ifdef CONSTRUCTOR
     std::cout << "Constructor (size)\t" << arr << '\n';
@@ -37,8 +38,9 @@ template<class T>
 mds::MyVector<T>::MyVector(const std::initializer_list<T>& elements) {
 
     size = elements.size();
+    capacity = size;
 
-    arr = new T[size];
+    arr = new T[capacity];
 
     int i = 0;
     for (auto j : elements) {
@@ -60,8 +62,9 @@ template <class T>
 mds::MyVector<T>::MyVector(const MyVector<T>& vec) {
 
     size = vec.size;
+    capacity = vec.capacity;
 
-    arr = new T[size];
+    arr = new T[capacity];
 
     for (int i = 0; i < size; ++i) {
 
@@ -80,13 +83,15 @@ mds::MyVector<T>::MyVector(const MyVector<T>& vec) {
 template <class T>
 mds::MyVector<T>::~MyVector() {
 
+    if (arr != nullptr) {
+        delete[] this->arr;
+    }
+
+
 #ifdef DESTRUCTOR
     std::cout << "Destructor\t\t" << arr << '\n';
 #endif // DESTRUCTOR
 
-    if (arr != nullptr) {
-        delete[] this->arr;
-    }
 
 }
 
@@ -94,10 +99,27 @@ mds::MyVector<T>::~MyVector() {
 
 
 
-template <class T>
-void mds::MyVector<T>::Erase() {
+//template <class T>
+//void mds::MyVector<T>::Erase() {
+//
+//    this->size = 0;
+//
+//    if (arr != nullptr) {
+//
+//        delete[] this->arr;
+//
+//    }
+//
+//    arr = nullptr;
+//
+//}
 
-    this->size = 0;
+
+template <class T>
+void mds::MyVector<T>::Erase_all() {
+
+    size = 0;
+    capacity = 0;
 
     if (arr != nullptr) {
 
@@ -139,19 +161,25 @@ T mds::MyVector<T>::Max() {
 template <class T>
 void mds::MyVector<T>::Append(T element) {
 
-    T* new_arr = new T[size + 1];
+    if (size == capacity) {
 
-    for (int i = 0; i < size; ++i) {
+        T* new_arr = new T[size + 1];
 
-        new_arr[i] = arr[i];
+        for (int i = 0; i < size; ++i) {
+
+            new_arr[i] = arr[i];
+
+        }
+
+        delete[] arr;
+
+        arr = new_arr;
+
+        capacity = size * 1.5;
 
     }
 
-    new_arr[size] = element;
-
-    delete[] arr;
-
-    arr = new_arr;
+    arr[size] = element;
 
     ++size;
 
@@ -164,7 +192,12 @@ void mds::MyVector<T>::Append(T element) {
 template <class T>
 T& mds::MyVector<T>::operator [] (const int index) {
 
-    return arr[index];
+    if (index >= size) {
+        throw;
+    }
+    else {
+        return arr[index];
+    }
 
 }
 
@@ -172,7 +205,12 @@ T& mds::MyVector<T>::operator [] (const int index) {
 template <class T>
 const T& mds::MyVector<T>::operator [] (const int index) const {
 
-    return arr[index];
+    if (index >= size) {
+        throw;
+    }
+    else {
+        return arr[index];
+    }
 
 }
 
@@ -186,11 +224,13 @@ mds::MyVector<T>& mds::MyVector<T>::operator = (const MyVector<T>& vec) {
 
     }
 
-    this->Erase();
+    this->Erase_all();
 
     this->size = vec.size;
 
-    this->arr = new T[size];
+    this.capacity = vec.capacity;
+
+    this->arr = new T[capacity];
 
     for (int i = 0; i < size; ++i) {
 

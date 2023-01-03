@@ -31,10 +31,8 @@ namespace mds {
     private:
 
         int size;
+        int capacity;
         T* arr;
-
-
-
 
 
     public:
@@ -54,15 +52,15 @@ namespace mds {
 
 
 
-        //Delete all the elements in the vector
         void Erase();
 
+        void Erase_all();
 
         int Get_size() { return this->size; }
 
+        int Get_capacity() { return this->capacity; }
 
         T Max();
-
 
         void Append(T element);
 
