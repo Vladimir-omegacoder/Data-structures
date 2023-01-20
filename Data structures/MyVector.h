@@ -15,14 +15,6 @@
 
 namespace mds {
 
-
-
-//#define CONSTRUCTOR
-//#define DESTRUCTOR
-//#define COPY_CONSTRUCTOR
-
-
-
     template <class T>
     class MyVector {
 
@@ -49,10 +41,10 @@ namespace mds {
         ~MyVector();
 
 
+        //TODO
+        MyVector Select_sort();
 
-
-
-        void Erase();
+        void Pop_back();
 
         void Erase_all();
 
@@ -61,6 +53,8 @@ namespace mds {
         int Get_capacity() { return this->capacity; }
 
         T Max();
+
+        T Min();
 
         void Append(T element);
 
@@ -79,5 +73,9 @@ namespace mds {
 
 
     };
+    
+
 
 }
+
+#include "MyVector.inl"
